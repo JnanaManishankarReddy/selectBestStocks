@@ -1,0 +1,38 @@
+<div class="sidebar-overlay" *ngIf="isOverlayVisible" (click)="closeSidebar()"></div>
+
+<aside class="sidebar" [ngClass]="{'expanded': isExpanded, 'open': isOverlayVisible}">
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <div class="sidebar-title" *ngIf="isExpanded">
+      <span class="icon">📊</span>
+      Menu
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar()" [title]="isExpanded ? 'Close' : 'Open'">
+      <span class="toggle-icon">{{ isExpanded ? '◀' : '▶' }}</span>
+    </button>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li class="nav-item" *ngFor="let item of menuItems">
+        <a [routerLink]="item.path"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: false }"
+           class="nav-link"
+           [title]="item.label"
+           (click)="closeSidebarOnMobileTablet()">
+          <span class="nav-icon">{{ item.icon }}</span>
+          <span class="nav-label" *ngIf="isExpanded">{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Sidebar Footer -->
+  <div class="sidebar-footer" *ngIf="isExpanded">
+    <div class="footer-text">
+      <small>Best Stocks v1.0</small>
+    </div>
+  </div>
+</aside>

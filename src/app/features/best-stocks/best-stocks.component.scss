@@ -1,0 +1,119 @@
+@import 'styles/_variables';
+
+/* Background */
+.best-stocks-container {
+  background: linear-gradient(to right, $bg-gradient-start, $bg-gradient-end);
+  padding: $container-padding;
+  border-radius: 0;
+}
+
+/* Main Title */
+.main-title {
+  font-weight: 700;
+  color: $text-primary-color;
+}
+
+/* Search Box */
+.search-box {
+  border-radius: $search-border-radius;
+  padding: $search-padding;
+  box-shadow: $shadow-sm;
+  border: 1px solid $border-color;
+  transition: all 0.3s ease;
+}
+
+.search-box:focus {
+  border-color: $primary;
+  box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+}
+
+/* Advanced Card */
+.advanced-card {
+  border-radius: $card-border-radius;
+  border: none;
+  box-shadow: $shadow-md;
+}
+
+.advanced-title {
+  font-weight: 600;
+  color: $text-primary-color;
+}
+
+.custom-input {
+  border-radius: $input-border-radius;
+  transition: 0.3s;
+}
+
+.custom-input:focus {
+  border-color: $success;
+  box-shadow: 0 0 8px rgba(25, 135, 84, 0.3);
+}
+
+/* Stock Card */
+.stock-card {
+  border: none;
+  border-radius: $stock-card-radius;
+  transition: all 0.3s ease;
+  background: white;
+  box-shadow: $shadow-lg;
+}
+
+.stock-card:hover {
+  transform: translateY($card-hover-lift);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+/* Stock Name */
+.stock-name {
+  font-weight: 700;
+  color: $primary;
+}
+
+.stock-full-name {
+  font-size: 14px;
+  color: $muted;
+}
+
+/* Market Badge */
+.market-badge {
+  background-color: $dark;
+  color: white;
+  padding: $badge-padding;
+  font-size: $badge-font-size;
+  border-radius: $badge-radius;
+}
+
+/* Price Section */
+.price-section {
+  border-top: 1px solid $border-top-color;
+  padding-top: 10px;
+}
+
+.current-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: $success;
+  margin: 0;
+}
+
+.actual-price {
+  font-size: 14px;
+  color: $danger;
+  margin: 0;
+}
+
+/* Responsive tweak */
+@media (max-width: $bp-mobile-max) {
+  .best-stocks-container {
+    padding: 15px;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@media (max-width: $bp-tablet-max) {
+  .best-stocks-container {
+    position: relative;
+    z-index: 1;
+  }
+}

@@ -1,0 +1,92 @@
+<div class="container-fluid mt-5 best-stocks-container">
+
+  <h2 class="text-center mb-4 main-title">📈 Best Stocks</h2>
+
+  <!-- Normal Search -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-6">
+      <input type="text"
+             class="form-control search-box"
+             placeholder="🔍 Search by Stock Name or Full Name"
+             [(ngModel)]="searchText">
+    </div>
+  </div>
+
+  <!-- Advanced Search -->
+  <div class="card advanced-card mb-4">
+    <div class="card-body">
+      <h5 class="mb-3 advanced-title">Advanced Search</h5>
+      <div class="row g-3">
+
+        <div class="col-md-3">
+          <select class="form-select custom-input" [(ngModel)]="selectedCategory">
+            <option value="">All Categories</option>
+            <option value="IT">IT</option>
+            <option value="Banking">Banking</option>
+            <option value="Energy">Energy</option>
+            <option value="Automobile">Automobile</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select class="form-select custom-input" [(ngModel)]="selectedMarket">
+            <option value="">All Markets</option>
+            <option value="NSE">NSE</option>
+            <option value="BSE">BSE</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <input type="number"
+                 class="form-control custom-input"
+                 placeholder="Min Price"
+                 [(ngModel)]="minPrice">
+        </div>
+
+        <div class="col-md-3">
+          <input type="number"
+                 class="form-control custom-input"
+                 placeholder="Max Price"
+                 [(ngModel)]="maxPrice">
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Stock Cards -->
+  <div class="row">
+    <div class="col-lg-4 col-md-6 mb-4"
+         *ngFor="let stock of filteredStocks()">
+
+      <div class="card stock-card h-100">
+        <div class="card-body">
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="stock-name">{{ stock.stockName }}</h5>
+            <span class="badge market-badge">{{ stock.market }}</span>
+          </div>
+
+          <h6 class="stock-full-name">{{ stock.fullName }}</h6>
+
+          <div class="stock-details mt-3">
+            <p><strong>Category:</strong> {{ stock.category }}</p>
+            <p><strong>Sub Category:</strong> {{ stock.subCategory }}</p>
+          </div>
+
+          <div class="price-section mt-3">
+            <p class="current-price">
+              ₹{{ stock.currentPrice }}
+            </p>
+            <p class="actual-price">
+              Target: ₹{{ stock.actualPrice }}
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
