@@ -1,1 +1,233 @@
-<p>create-stock works!</p>
+<div class="container mt-4">
+
+  <button class="btn btn-danger mb-3"
+        (click)="updatePreviousData()">
+  Update Previous Day Data
+</button>
+
+
+  <div class="card shadow-lg border-0">
+
+    <div class="card-header bg-primary text-white text-center">
+      <h4>{{isEditMode ? 'Update Stock' : 'Create Stock'}}</h4>
+    </div>
+
+    <div class="card-body">
+
+      <!-- Alert -->
+      <div *ngIf="message" class="alert alert-{{messageType}}">
+        {{message}}
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="stockForm" (ngSubmit)="saveStock()">
+
+        <div class="row">
+
+          <!-- Stock Name -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Stock Name</label>
+            <input type="text"
+                   class="form-control"
+                   formControlName="stockName"
+                   placeholder="Ex: TCS">
+          </div>
+
+          <!-- Full Name -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text"
+                   class="form-control"
+                   formControlName="fullName">
+          </div>
+
+          <!-- Category -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Category</label>
+            <select class="form-control" formControlName="category">
+                <option value="">Select Category</option>
+                <option *ngFor="let c of categories" [value]="c">
+                    {{c}}
+                </option>
+            </select>
+
+            <button type="button" class="btn btn-sm btn-link p-0 mt-1" (click)="showCategoryInput = true">
+                + Add Category
+            </button>
+
+            <div *ngIf="showCategoryInput" class="mt-2 d-flex">
+
+                <input type="text" class="form-control me-2" [(ngModel)]="newCategory" placeholder="Enter category">
+
+                <button class="btn btn-success btn-sm me-2" type="button" (click)="addCategory()"> Save </button>
+                <button class="btn btn-secondary btn-sm" type="button" (click)="addCategory('cancel')"> Cancel </button>
+
+            </div>
+
+          </div>
+
+            <!-- Sub Category -->
+            <div class="col-md-3 mb-3">
+                <label class="form-label">Sub Category</label>
+                <select class="form-control"formControlName="subCategory">
+                    <option value="">Select Sub Category</option>
+                    <option *ngFor="let c of categories"[value]="c">
+                        {{c}}
+                    </option>
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+          <!-- Current Price -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Current Price</label>
+            <input type="number"
+                   class="form-control"
+                   formControlName="currentPrice">
+          </div>
+
+          <!-- Actual Price -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Actual Price</label>
+            <input type="number"
+                   class="form-control"
+                   formControlName="actualPrice">
+          </div>
+
+          <!-- Market -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Market</label>
+            <select class="form-control"
+                    formControlName="market">
+
+              <option value="">Select Market</option>
+              <option *ngFor="let m of markets" [value]="m">
+                {{m}}
+              </option>
+
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="mt-3">
+
+          <button class="btn btn-success me-2">
+            {{isEditMode ? 'Update Stock' : 'Create Stock'}}
+          </button>
+
+          <button *ngIf="isEditMode"
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="cancelEdit()">
+            Cancel
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- Stock List Table -->
+  <div class="card shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+      Stock List
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-light">
+            <tr>
+                <th>Stock</th>
+                <th>Full Name</th>
+                <th>Category</th>
+                <th>SubCategory</th>
+                <th>Current</th>
+                <th>Actual</th>
+                <th>Market</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr *ngFor="let stock of paginatedStocks">
+
+                <td>{{stock.stockName}}</td>
+                <td>{{stock.fullName}}</td>
+                <td>{{stock.category}}</td>
+                <td>{{stock.subCategory}}</td>
+                <td>₹{{stock.currentPrice}}</td>
+                <td>₹{{stock.actualPrice}}</td>
+                <td>{{stock.market}}</td>
+
+                <td>
+                <button class="btn btn-warning btn-sm"
+                        (click)="editStock(stock)">
+                    Edit
+                </button>
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+        <nav class="mt-3">
+
+            <ul class="pagination justify-content-center">
+
+                <!-- Previous -->
+                <li class="page-item" [class.disabled]="currentPage === 1">
+
+                <button class="page-link"
+                        (click)="prevPage()">
+                    Previous
+                </button>
+
+                </li>
+
+                <!-- Page numbers -->
+                <li class="page-item"
+                    *ngFor="let page of pages"
+                    [class.active]="page === currentPage">
+
+                <button class="page-link"
+                        (click)="setPage(page)">
+                    {{page}}
+                </button>
+
+                </li>
+
+                <!-- Next -->
+                <li class="page-item"
+                    [class.disabled]="currentPage === totalPages">
+
+                <button class="page-link"
+                        (click)="nextPage()">
+                    Next
+                </button>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+
+    </div>
+
+  </div>
+
+</div>

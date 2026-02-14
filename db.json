@@ -1,0 +1,60 @@
+{
+  "Categories": [
+    "IT",
+    "Banking",
+    "Energy",
+    "Automobile"
+  ],
+  "stocks": [
+    {
+      "stockName": "TCS",
+      "fullName": "Tata Consultancy Services",
+      "category": "IT",
+      "subCategory": "Software Services",
+      "currentPrice": 4020,
+      "actualPrice": 4108,
+      "market": "NSE",
+      "id": 1
+    },
+    {
+      "stockName": "INFY",
+      "fullName": "Infosys Limited",
+      "category": "IT",
+      "subCategory": "Digital Services",
+      "currentPrice": 1675,
+      "actualPrice": 1750,
+      "market": "BSE",
+      "id": 2
+    },
+    {
+      "id": 3,
+      "stockName": "HDFCBANK",
+      "fullName": "HDFC Bank Limited",
+      "category": "Banking",
+      "subCategory": "Private Bank",
+      "currentPrice": 1520,
+      "actualPrice": 1600,
+      "market": "NSE"
+    },
+    {
+      "id": 4,
+      "stockName": "RELIANCE",
+      "fullName": "Reliance Industries Limited",
+      "category": "Energy",
+      "subCategory": "Oil & Gas",
+      "currentPrice": 2850,
+      "actualPrice": 3000,
+      "market": "BSE"
+    },
+    {
+      "id": 5,
+      "stockName": "TATAMOTORS",
+      "fullName": "Tata Motors Limited",
+      "category": "Automobile",
+      "subCategory": "Passenger Vehicles",
+      "currentPrice": 920,
+      "actualPrice": 1000,
+      "market": "NSE"
+    }
+  ]
+}

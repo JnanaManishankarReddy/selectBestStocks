@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit  } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { StockUpdateService } from '../../core/services/stock-updates/stock-update.service';
 
 @Component({
   selector: 'app-best-stocks',
@@ -11,89 +12,105 @@ import { FormsModule } from '@angular/forms';
 })
 export class BestStocksComponent {
 
+  
+  stocks: any[] = [];
+  categories: string[] = [];
+
   searchText: string = '';
   selectedCategory: string = '';
   selectedMarket: string = '';
   minPrice: number | null = null;
   maxPrice: number | null = null;
 
-  stocks = [
-    {
-      stockName: 'TCS',
-      fullName: 'Tata Consultancy Services',
-      category: 'IT',
-      subCategory: 'Software Services',
-      currentPrice: 4020,
-      actualPrice: 4100,
-      market: 'NSE'
-    },
-    {
-      stockName: 'INFY',
-      fullName: 'Infosys Limited',
-      category: 'IT',
-      subCategory: 'Digital Services',
-      currentPrice: 1675,
-      actualPrice: 1750,
-      market: 'NSE'
-    },
-    {
-      stockName: 'HDFCBANK',
-      fullName: 'HDFC Bank Limited',
-      category: 'Banking',
-      subCategory: 'Private Bank',
-      currentPrice: 1520,
-      actualPrice: 1600,
-      market: 'NSE'
-    },
-    {
-      stockName: 'RELIANCE',
-      fullName: 'Reliance Industries Limited',
-      category: 'Energy',
-      subCategory: 'Oil & Gas',
-      currentPrice: 2850,
-      actualPrice: 3000,
-      market: 'BSE'
-    },
-    {
-      stockName: 'TATAMOTORS',
-      fullName: 'Tata Motors Limited',
-      category: 'Automobile',
-      subCategory: 'Passenger Vehicles',
-      currentPrice: 920,
-      actualPrice: 1000,
-      market: 'NSE'
-    }
-  ];
+  markets = ['NSE', 'BSE'];
 
-  constructor() { }
+  /* Pagination */
+  currentPage = 1;
+  pageSize = 12;
+  totalCount = 0;
+  totalPages = 0;
+  pages: number[] = [];
 
-  ngOnInit() { }
+  constructor(
+    private stockService: StockUpdateService,
+  ) { }
 
-  filteredStocks() {
-    return this.stocks.filter(stock => {
+  ngOnInit() {
+    this.loadStocks();
+    this.loadCategories();
+  }
 
-      const matchesSearch =
-        stock.stockName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        stock.fullName.toLowerCase().includes(this.searchText.toLowerCase());
+  loadStocks(page: number = 1) {
 
-      const matchesCategory =
-        this.selectedCategory ? stock.category === this.selectedCategory : true;
+    this.currentPage = page;
 
-      const matchesMarket =
-        this.selectedMarket ? stock.market === this.selectedMarket : true;
+    const filters: any = {
+      _page: this.currentPage,
+      _limit: this.pageSize
+    };
 
-      const matchesMinPrice =
-        this.minPrice != null ? stock.currentPrice >= this.minPrice : true;
+    if (this.selectedCategory)
+      filters.category = this.selectedCategory;
 
-      const matchesMaxPrice =
-        this.maxPrice != null ? stock.currentPrice <= this.maxPrice : true;
+    if (this.selectedMarket)
+      filters.market = this.selectedMarket;
 
-      return matchesSearch &&
-             matchesCategory &&
-             matchesMarket &&
-             matchesMinPrice &&
-             matchesMaxPrice;
+    if (this.searchText)
+      filters.stockName_like = this.searchText;
+
+    if (this.minPrice != null)
+      filters.currentPrice_gte = this.minPrice;
+
+    if (this.maxPrice != null)
+      filters.currentPrice_lte = this.maxPrice;
+
+    this.stockService.getStocksFiltered(filters).subscribe(response => {
+
+      this.stocks = response.body || [];
+
+      const total = response.headers.get('X-Total-Count');
+
+      this.totalCount = total ? Number(total) : 0;
+
+      this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+
+      const maxPagesToShow = 5;
+      let start = Math.max(this.currentPage - 2, 1);
+      let end = Math.min(start + maxPagesToShow - 1, this.totalPages);
+      this.pages = [];
+      for (let i = start; i <= end; i++) {
+        this.pages.push(i);
+      }
+
     });
+
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages)
+      this.loadStocks(this.currentPage + 1);
+  }
+
+  prevPage() {
+    if (this.currentPage > 1)
+      this.loadStocks(this.currentPage - 1);
+  }
+
+  goToPage(page: number) {
+    this.loadStocks(page);
+  }
+
+  loadCategories() {
+
+    this.stockService.getCategories().subscribe({
+      next: (data) => {
+        this.categories = data;
+      },
+      error: (err) => {
+        console.error('Error loading categories', err);
+      }
+    });
+
   }
 
 }

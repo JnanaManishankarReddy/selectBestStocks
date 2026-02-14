@@ -5,10 +5,8 @@
   <!-- Normal Search -->
   <div class="row justify-content-center mb-4">
     <div class="col-md-6">
-      <input type="text"
-             class="form-control search-box"
-             placeholder="🔍 Search by Stock Name or Full Name"
-             [(ngModel)]="searchText">
+      <input type="text" class="form-control search-box" placeholder="🔍 Search by Stock Name or Full Name"
+        [(ngModel)]="searchText" (ngModelChange)="loadStocks(1)">
     </div>
   </div>
 
@@ -19,35 +17,32 @@
       <div class="row g-3">
 
         <div class="col-md-3">
-          <select class="form-select custom-input" [(ngModel)]="selectedCategory">
+          <select class="form-select custom-input" [(ngModel)]="selectedCategory" (change)="loadStocks(1)">
             <option value="">All Categories</option>
-            <option value="IT">IT</option>
-            <option value="Banking">Banking</option>
-            <option value="Energy">Energy</option>
-            <option value="Automobile">Automobile</option>
+            <option *ngFor="let category of categories" [value]="category">
+              {{category}}
+            </option>
+
           </select>
         </div>
 
         <div class="col-md-3">
-          <select class="form-select custom-input" [(ngModel)]="selectedMarket">
+          <select class="form-select custom-input" [(ngModel)]="selectedMarket" (change)="loadStocks(1)">
             <option value="">All Markets</option>
-            <option value="NSE">NSE</option>
-            <option value="BSE">BSE</option>
+            <option *ngFor="let market of markets" [value]="market">
+              {{market}}
+            </option>
           </select>
         </div>
 
         <div class="col-md-3">
-          <input type="number"
-                 class="form-control custom-input"
-                 placeholder="Min Price"
-                 [(ngModel)]="minPrice">
+          <input type="number" class="form-control custom-input" placeholder="Min Price" [(ngModel)]="minPrice"
+            (change)="loadStocks(1)">
         </div>
 
         <div class="col-md-3">
-          <input type="number"
-                 class="form-control custom-input"
-                 placeholder="Max Price"
-                 [(ngModel)]="maxPrice">
+          <input type="number" class="form-control custom-input" placeholder="Max Price" [(ngModel)]="maxPrice"
+            (change)="loadStocks(1)">
         </div>
 
       </div>
@@ -56,9 +51,7 @@
 
   <!-- Stock Cards -->
   <div class="row">
-    <div class="col-lg-4 col-md-6 mb-4"
-         *ngFor="let stock of filteredStocks()">
-
+    <div class="col-lg-4 col-md-6 mb-4" *ngFor="let stock of stocks">
       <div class="card stock-card h-100">
         <div class="card-body">
 
@@ -76,17 +69,48 @@
 
           <div class="price-section mt-3">
             <p class="current-price">
-              ₹{{ stock.currentPrice }}
+              Current Price: ₹{{ stock.currentPrice }}
             </p>
             <p class="actual-price">
-              Target: ₹{{ stock.actualPrice }}
+              Actual Price: ₹{{ stock.actualPrice }}
             </p>
           </div>
 
         </div>
       </div>
-
     </div>
   </div>
+  <nav class="mt-4">
+
+    <ul class="pagination justify-content-center">
+
+      <!-- Previous -->
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <button class="page-link" (click)="prevPage()">
+          Previous
+        </button>
+      </li>
+
+      <!-- Page numbers -->
+      <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+
+        <button class="page-link" (click)="goToPage(page)">
+          {{page}}
+        </button>
+
+      </li>
+
+      <!-- Next -->
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+
+        <button class="page-link" (click)="nextPage()">
+          Next
+        </button>
+
+      </li>
+
+    </ul>
+
+  </nav>
 
 </div>
