@@ -3,7 +3,7 @@ const unzipper = require('unzipper');
 const csv = require('csv-parser');
 const fs = require('fs');
 const path = require('path');
-const cron = require('node-cron');
+// const cron = require('node-cron');
 
 const DB_PATH = path.join(__dirname, '../db.json');
 
@@ -167,7 +167,7 @@ module.exports = {
 
 
 // Run daily at 6 PM
-cron.schedule('0 18 * * *', () => {
-  console.log("Running daily update...");
-  updatePrices(getTodayDate());
-});
+// cron.schedule('0 18 * * *', () => {
+//   console.log("Running daily update...");
+//   updatePrices(getTodayDate());
+// });
