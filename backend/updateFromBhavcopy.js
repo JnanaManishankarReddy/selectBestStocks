@@ -56,7 +56,7 @@ async function downloadBhavcopy(date) {
 
   const url = `https://archives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_${date}_F_0000.csv.zip`;
 
-  console.log("Downloading:", url);
+  console.log("📥 Downloading:", url);
 
   const response = await axios({
     method: 'GET',
@@ -71,6 +71,7 @@ async function downloadBhavcopy(date) {
   });
 
   const buffer = Buffer.from(response.data);
+  console.log("✅ Downloaded", buffer.length, "bytes");
 
   const directory = await unzipper.Open.buffer(buffer);
 
@@ -79,8 +80,14 @@ async function downloadBhavcopy(date) {
   }
 
   const file = directory.files[0];
+  console.log("📄 Extracted file:", file.path);
 
-  return file.stream().pipe(csv());
+  // Use csv() with proper options
+  return file.stream()
+    .pipe(csv({
+      skipComments: true,
+      mapHeaders: ({ header }) => header.trim()  // Trim header whitespace
+    }));
 }
 
 
@@ -104,15 +111,14 @@ async function updatePrices(date) {
 
         rowCount++;
 
-        console.log("Reading:", row.SYMBOL);
+        // NSE CSV uses abbreviated column names: TckrSymb, ClsPric
+        const symbol = row.TckrSymb;
+        const closePrice = parseFloat(row.ClsPric);
 
-        const symbol = row.SYMBOL;
-        const closePrice = parseFloat(row.CLOSE);
+        if (!symbol || isNaN(closePrice)) {
+          return;
+        }
 
-         if (!symbol || isNaN(closePrice)) return;
-
-        // let stock = stocks.find(s => s.stockName === symbol);
-        
         let stock = stockMap[symbol];
 
         if (stock) {
@@ -133,11 +139,11 @@ async function updatePrices(date) {
       });
 
       bhavStream.on('end', () => {
-        console.log("Total rows:", rowCount);
-
+        console.log("📊 Total rows processed:", rowCount);
+        console.log("📦 Total stocks in DB:", stocks.length);
 
         fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
-        console.log("All prices updated successfully.");
+        console.log("✅ All prices updated successfully.");
         resolve();   // 🔥 Now API waits properly
 
       });

@@ -1,0 +1,13 @@
+FIRST ROW KEYS: TradDt, BizDt, Sgmt, Src, FinInstrmTp, FinInstrmId, ISIN, TckrSymb, SctySrs, XpryDt, FininstrmActlXpryDt, StrkPric, OptnTp, FinInstrmNm, OpnPric, HghPric, LwPric, ClsPric, LastPric, PrvsClsgPric, UndrlygPric, SttlmPric, OpnIntrst, ChngInOpnIntrst, TtlTradgVol, TtlTrfVal, TtlNbOfTxsExctd, SsnId, NewBrdLotQty, Rmks, Rsvd1, Rsvd2, Rsvd3, Rsvd4
+FIRST ROW SAMPLE:
+  TradDt = "2026-02-13"
+  BizDt = "2026-02-13"
+  Sgmt = "CM"
+  Src = "NSE"
+  FinInstrmTp = "STK"
+  FinInstrmId = "19078"
+  ISIN = "IN0020200104"
+  TckrSymb = "SGBJUN28"
+  SctySrs = "GB"
+  XpryDt = ""
+EXTRACTED: symbol="null", closePrice="null"

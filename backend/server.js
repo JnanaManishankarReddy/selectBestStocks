@@ -13,27 +13,31 @@ const PORT = 5000;
 const LAST_UPDATE_FILE = path.join(__dirname, 'lastUpdate.json');
 
 app.get('/update-previous', async (req, res) => {
-    res.set('Cache-Control', 'no-store');
+    console.log("ROUTE HIT");
+    // res.set('Cache-Control', 'no-store');
+    
     try {
 
         const yesterday = getYesterdayDate();
-        let count = 0;  
+        console.log("Calling updatePrices with:", yesterday);
+        // let count = 0;  
 
         // Check last update
-        if (fs.existsSync(LAST_UPDATE_FILE)) {
-            const data = JSON.parse(fs.readFileSync(LAST_UPDATE_FILE));
+        // if (fs.existsSync(LAST_UPDATE_FILE)) {
+        //     const data = JSON.parse(fs.readFileSync(LAST_UPDATE_FILE));
 
-            if (data.date === yesterday) {
-                count = data.count || 0;
-                // if (count >= 5) {
-                //     return res.json({ message: "Maximum 2 updates allowed today." });
-                // }
-            }
-        }
+        //     if (data.date === yesterday) {
+        //         count = data.count || 0;
+        //         // if (count >= 5) {
+        //         //     return res.json({ message: "Maximum 2 updates allowed today." });
+        //         // }
+        //     }
+        // }
 
         await updatePrices(yesterday);
+        console.log("updatePrices finished");
 
-        fs.writeFileSync(LAST_UPDATE_FILE, JSON.stringify({ date: yesterday, count: count + 1 }));
+        // fs.writeFileSync(LAST_UPDATE_FILE, JSON.stringify({ date: yesterday, count: count + 1 }));
 
         res.json({ message: "Yesterday data updated successfully." });
     } catch (error) {
